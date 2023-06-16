@@ -5,7 +5,7 @@ pipeline {
         stage('Compilación') {
             steps {
                 // Obtener el código fuente del repositorio utilizando Git
-                git credentialsId: 'nombre-de-las-credenciales', url: 'https://github.com/tu-repositorio.git'
+                git credentialsId: 'nombre-de-las-credenciales', url: 'https://github.com/javieralmeida30/TestingProject.git'
                 
                 // Instalar dependencias utilizando Maven
                 sh 'mvn clean install'
