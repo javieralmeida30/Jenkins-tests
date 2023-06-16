@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('build') {
+            steps {
+                echo 'Hello build'
+            }
+        }
+        stage('test') {
+            steps {
+                echo 'Hello test'
+            }
+        }
+      stage('approval') {
+    steps {
+        input message: "Do you want to deploy to production?", submitterParameter: 'Approver', submitter: 'Deploy to production?'
+    }
+}
+
+
+        stage('deploy') {
+            steps {
+                echo 'Hello deploy'
+            }
+        }
+    }
+}
