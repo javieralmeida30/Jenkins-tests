@@ -1,27 +1,41 @@
 pipeline {
     agent any
-
+    
     stages {
-        stage('build') {
+        stage('Compilación') {
             steps {
-                echo 'Hello build'
+                // Obtener el código fuente del repositorio utilizando Git
+                git credentialsId: 'nombre-de-las-credenciales', url: 'https://github.com/tu-repositorio.git'
+                
+                // Instalar dependencias utilizando Maven
+                sh 'mvn clean install'
             }
         }
-        stage('test') {
+        
+        stage('Pruebas') {
             steps {
-                echo 'Hello test'
+                // Ejecutar pruebas unitarias utilizando Maven
+                sh 'mvn test'
+                
+                // Ejecutar pruebas de integración utilizando Docker Compose
+                sh 'docker-compose -f docker-compose.test.yml up --abort-on-container-exit'
             }
         }
-      stage('approval') {
-    steps {
-        input message: "Do you want to deploy to production?", submitterParameter: 'Approver', submitter: 'Deploy to production?'
-    }
-}
-
-
-        stage('deploy') {
+        
+        stage('Empaquetado') {
             steps {
-                echo 'Hello deploy'
+                // Construir una imagen Docker de la aplicación
+                sh 'docker build -t tu-app:latest .'
+                
+                // Publicar la imagen Docker en un registro de contenedores
+                sh 'docker push tu-registry/tu-app:latest'
+            }
+        }
+        
+        stage('Despliegue') {
+            steps {
+                // Implementar la aplicación en un entorno de producción utilizando Kubernetes
+                sh 'kubectl apply -f tu-archivo-deploy.yml'
             }
         }
     }
