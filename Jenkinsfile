@@ -1,8 +1,11 @@
-def awsCredentials1 = 'AWS_ACCESS_KEY_ID'
-def awsCredentials2 = 'AWS_SECRET_ACCESS_KEY'
-
 pipeline {
   agent any
+
+  environment {
+    AWS_REGION_DEFAULT = 'us-east-2'
+    AWS_ACCESS_KEY_DEFAULT = credentials('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_KEY_DEFAULT = credentials('AWS_SECRET_ACCESS_KEY')
+  }
 
   stages {
     stage('Checkout') {
@@ -13,17 +16,13 @@ pipeline {
 
     stage('Terraform Init') {
       steps {
-        script {
-          sh 'terraform init'
-        }
+        sh 'terraform init'
       }
     }
 
     stage('Terraform Plan') {
       steps {
-        script {
-          sh 'terraform plan -out=tfplan'
-        }
+        sh 'terraform plan -out=tfplan'
       }
     }
 
@@ -32,14 +31,8 @@ pipeline {
         branch 'master'
       }
       steps {
-        script {
-          withAWS(credentials: awsCredentials1, region: 'us-east-2') {
-            sh 'terraform apply tfplan'
-          }
-
-          withAWS(credentials: awsCredentials2, region: 'us-east-2') {
-            sh 'terraform apply tfplan'
-          }
+        withAWS(region: 'us-east-2') {
+          sh 'terraform apply tfplan'
         }
       }
     }
