@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "AWS region"
   type        = string
-  default     = "us-east-2"
+  default     = var.aws_region_default
 }
 
 variable "ami_id" {
@@ -16,9 +16,11 @@ variable "instance_type" {
 }
 
 variable "aws_access_key" {
-    description = "Access Key"
+  description = "Access Key"
+  default     = var.aws_access_key_default
 }
 
 variable "aws_secret_key" {
-  description = "secret Key"
+  description = "Secret Key"
+  default     = var.aws_secret_key_default
 }
