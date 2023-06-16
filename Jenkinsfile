@@ -1,29 +1,40 @@
+def awsCredentials = 'AKIAY75G2LMGDJWYYMMZ' 
+
 pipeline {
   agent any
 
   stages {
     stage('Checkout') {
       steps {
-        git branch: 'master', url: 'https://github.com/javieralmeida30/TestingProject.git'
+        checkout scm
       }
     }
 
     stage('Terraform Init') {
       steps {
-        sh 'terraform init'
+        script {
+          sh 'terraform init'
+        }
       }
     }
 
     stage('Terraform Plan') {
       steps {
-        sh 'terraform plan -out=tfplan'
+        script {
+          sh 'terraform plan -out=tfplan'
+        }
       }
     }
 
     stage('Terraform Apply') {
+      when {
+        branch 'master' // Cambia esto según las ramas que desees incluir
+      }
       steps {
-        withAWS(credentials: 'AKIAY75G2LMGDJWYYMMZ', region: 'us-east-2') {
-          sh 'terraform apply tfplan'
+        script {
+          withAWS(credentials: awsCredentials, region: 'us-east-2') {
+            sh 'terraform apply tfplan'
+          }
         }
       }
     }
