@@ -1,4 +1,5 @@
-def awsCredentials = 'AKIAY75G2LMGDJWYYMMZ' 
+def awsCredentials1 = 'AWS_ACCESS_KEY_ID'
+def awsCredentials2 = 'AWS_SECRET_ACCESS_KEY'
 
 pipeline {
   agent any
@@ -28,11 +29,15 @@ pipeline {
 
     stage('Terraform Apply') {
       when {
-        branch 'master' // Cambia esto según las ramas que desees incluir
+        branch 'master'
       }
       steps {
         script {
-          withAWS(credentials: awsCredentials, region: 'us-east-2') {
+          withAWS(credentials: awsCredentials1, region: 'us-east-2') {
+            sh 'terraform apply tfplan'
+          }
+
+          withAWS(credentials: awsCredentials2, region: 'us-east-2') {
             sh 'terraform apply tfplan'
           }
         }
@@ -40,4 +45,3 @@ pipeline {
     }
   }
 }
-
