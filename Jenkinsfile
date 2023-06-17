@@ -1,12 +1,11 @@
 pipeline {
   agent any
 
-environment {
-  AWS_REGION_DEFAULT = 'us-east-2'
-  AWS_ACCESS_KEY_DEFAULT = sh(script: 'terraform output -raw aws_access_key', returnStdout: true).trim()
-  AWS_SECRET_ACCESS_KEY_DEFAULT = sh(script: 'terraform output -raw aws_secret_key', returnStdout: true).trim()
-}
-
+  environment {
+    AWS_REGION_DEFAULT = 'us-east-2'
+    AWS_ACCESS_KEY_DEFAULT = sh(script: 'terraform output -raw aws_access_key', returnStdout: true).trim()
+    AWS_SECRET_ACCESS_KEY_DEFAULT = sh(script: 'terraform output -raw aws_secret_key', returnStdout: true).trim()
+  }
 
   stages {
     stage('Checkout') {
@@ -17,13 +16,17 @@ environment {
 
     stage('Terraform Init') {
       steps {
-        sh 'terraform init'
+        dir('terraform') {
+          sh 'terraform init'
+        }
       }
     }
 
     stage('Terraform Plan') {
       steps {
-        sh 'terraform plan -out=tfplan'
+        dir('terraform') {
+          sh 'terraform plan -out=tfplan'
+        }
       }
     }
 
@@ -32,8 +35,10 @@ environment {
         branch 'master'
       }
       steps {
-        withAWS(region: 'us-east-2') {
-          sh 'terraform apply tfplan'
+        dir('terraform') {
+          withAWS(region: 'us-east-2') {
+            sh 'terraform apply tfplan'
+          }
         }
       }
     }
