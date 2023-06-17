@@ -17,8 +17,12 @@ variable "instance_type" {
 
 variable "aws_access_key_var" {
   description = "AWS_ACCESS_KEY_ID"
+  type        = string
+  default     = null
 }
 
 variable "aws_secret_key_var" {
   description = "AWS_SECRET_ACCESS_KEY"
+  type        = string
+  default     = null
 }
