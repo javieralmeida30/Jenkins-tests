@@ -17,9 +17,6 @@ pipeline {
     }
 
     stage('Terraform Apply') {
-      when {
-        branch 'master'
-      }
       steps {
         dir('terraform') {
           sh 'terraform apply -auto-approve'
