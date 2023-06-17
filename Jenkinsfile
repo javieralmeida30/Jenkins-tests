@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    AWS_REGION_DEFAULT = 'us-east-2'
+    AWS_REGION_DEFAULT     = 'us-east-2'
     AWS_ACCESS_KEY_DEFAULT = sh(script: 'terraform output -raw aws_access_key', returnStdout: true).trim()
     AWS_SECRET_KEY_DEFAULT = sh(script: 'terraform output -raw aws_secret_key', returnStdout: true).trim()
   }
@@ -36,7 +36,7 @@ pipeline {
       }
       steps {
         dir('terraform') {
-          withAWS(region: 'us-east-2') {
+          withAWS(region: "${env.AWS_REGION_DEFAULT}") {
             sh 'terraform apply tfplan'
           }
         }
