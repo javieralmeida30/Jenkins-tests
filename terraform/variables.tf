@@ -1,7 +1,7 @@
-variable "aws_region" {
-  description = "AWS region"
+variable "aws_region_default" {
+  description = "Default AWS region"
   type        = string
-  default     = var.aws_region_default
+  default     = "us-east-2"
 }
 
 variable "ami_id" {
