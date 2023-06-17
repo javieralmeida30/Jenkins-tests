@@ -1,11 +1,12 @@
 pipeline {
   agent any
 
-  environment {
-    AWS_REGION_DEFAULT = 'us-east-2'
-    AWS_ACCESS_KEY_DEFAULT = credentials('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_KEY_DEFAULT = credentials('AWS_SECRET_ACCESS_KEY')
-  }
+environment {
+  AWS_REGION_DEFAULT = 'us-east-2'
+  AWS_ACCESS_KEY_DEFAULT = sh(script: 'terraform output -raw aws_access_key', returnStdout: true).trim()
+  AWS_SECRET_ACCESS_KEY_DEFAULT = sh(script: 'terraform output -raw aws_secret_key', returnStdout: true).trim()
+}
+
 
   stages {
     stage('Checkout') {
