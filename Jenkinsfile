@@ -16,21 +16,13 @@ pipeline {
       }
     }
 
-    stage('Terraform Plan') {
-      steps {
-        dir('terraform') {
-          sh 'terraform plan -out=tfplan | tee terraform_plan.log'
-        }
-      }
-    }
-
     stage('Terraform Apply') {
       when {
         branch 'master'
       }
       steps {
         dir('terraform') {
-          sh 'terraform apply tfplan'
+          sh 'terraform apply -auto-approve'
         }
       }
     }
