@@ -15,12 +15,10 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
-variable "aws_access_key" {
-  description = "Access Key"
-  default     = var.aws_access_key_default
+variable "aws_access_key_var" {
+  description = "AWS_ACCESS_KEY_ID"
 }
 
-variable "aws_secret_key" {
-  description = "Secret Key"
-  default     = var.aws_secret_key_default
+variable "aws_secret_key_var" {
+  description = "AWS_SECRET_ACCESS_KEY"
 }
